@@ -19,8 +19,8 @@ export const PokeNumber = styled.Text`
 `;
 
 export const Pokemon = styled.Image`
-  width: 50px;
-  height: 50px;
+  width: 80px;
+  height: 80px;
   margin-top: 10px;
 `;
 
@@ -37,6 +37,7 @@ export const PokeName = styled.Text`
 export const PokeStrong = styled.Text`
   color: #ff9000;
   font-family: 'RobotoSlab-Regular';
+  text-transform: capitalize;
 `;
 
 export const PokeTypes = styled.View`
@@ -52,4 +53,5 @@ export const PokeType = styled.Text`
 export const PokeInfoType = styled.Text`
   color: #ff9000;
   font-family: 'RobotoSlab-Regular';
+  text-transform: capitalize;
 `;
