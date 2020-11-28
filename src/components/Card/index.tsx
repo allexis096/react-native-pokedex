@@ -17,6 +17,7 @@ interface CardProps {
   poke_img: string;
   poke_name: string;
   poke_type: string[];
+  poke_onPress: () => void;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -24,9 +25,10 @@ const Card: React.FC<CardProps> = ({
   poke_img,
   poke_name,
   poke_type,
+  poke_onPress,
 }) => {
   return (
-    <PokeCard>
+    <PokeCard onPress={poke_onPress}>
       <PokeNumber>{`#${poke_number}`}</PokeNumber>
 
       <Pokemon source={{ uri: poke_img }} />
