@@ -1,10 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+import api from '../../services/api';
 
 import Card from '../../components/Card';
 
-import { TextInput, Header, Icon, PokeContainer } from './styles';
+import { TextInput, Header, Icon, PokeList } from './styles';
+import { getPokemon } from '../../utils/getPokemon';
+
+export interface PokemonProps {
+  typesPoke: Array<{
+    type: {
+      name: string;
+    };
+  }>;
+  name: string;
+  image: string;
+}
 
 const Dashboard: React.FC = () => {
+  const [pokemons, setPokemons] = useState<PokemonProps[]>([]);
+
+  useEffect(() => {
+    (async function getPokemons(): Promise<void> {
+      const pokemonsList = [];
+      const { data } = await api.get('pokemon?limit=4');
+
+      for await (const pokemon of data.results) {
+        const poke = await getPokemon(pokemon.url);
+        pokemonsList.push(poke);
+      }
+
+      setPokemons(pokemonsList);
+    })();
+  }, []);
+
   return (
     <>
       <Header>
@@ -15,14 +44,21 @@ const Dashboard: React.FC = () => {
         />
       </Header>
 
-      <PokeContainer>
-        <Card
-          poke_number="1"
-          poke_img="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png"
-          poke_name="Bulbasaur"
-          poke_type="Grass, Poison"
-        />
-      </PokeContainer>
+      <PokeList
+        data={pokemons}
+        keyExtractor={pokemon => pokemon.name}
+        numColumns={2}
+        renderItem={({ item: pokemon, index }) => (
+          <Card
+            poke_number={index + 1}
+            poke_img={pokemon.image}
+            poke_name={pokemon.name}
+            poke_type={pokemon.typesPoke.map(type =>
+              type.type.name.concat(', '),
+            )}
+          />
+        )}
+      />
     </>
   );
 };

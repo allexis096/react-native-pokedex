@@ -1,5 +1,7 @@
 import styled from 'styled-components/native';
 import Feather from 'react-native-vector-icons/Feather';
+import { FlatList } from 'react-native';
+import { PokemonProps } from '.';
 
 export const Header = styled.View`
   background-color: #232129;
@@ -19,7 +21,6 @@ export const TextInput = styled.TextInput`
   flex: 1;
 `;
 
-export const PokeContainer = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
+export const PokeList = styled(FlatList as new () => FlatList<PokemonProps>)`
+  margin: 0 8px;
 `;
