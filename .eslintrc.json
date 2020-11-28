@@ -29,6 +29,7 @@
     "prettier"
   ],
   "rules": {
+    "react/jsx-curly-newline": "off",
     "no-restricted-syntax": "off",
     "camelcase": "off",
     "react/prop-types": "off",
