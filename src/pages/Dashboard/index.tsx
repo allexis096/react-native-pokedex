@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 import api from '../../services/api';
 
 import Card from '../../components/Card';
+import { getPokemon } from '../../utils/getPokemon';
 
 import { TextInput, Header, Icon, PokeList } from './styles';
-import { getPokemon } from '../../utils/getPokemon';
 
 export interface PokemonProps {
   typesPoke: Array<{
@@ -19,6 +21,8 @@ export interface PokemonProps {
 
 const Dashboard: React.FC = () => {
   const [pokemons, setPokemons] = useState<PokemonProps[]>([]);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async function getPokemons(): Promise<void> {
@@ -35,7 +39,7 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <SafeAreaView>
       <Header>
         <Icon name="search" color="#666360" size={20} />
         <TextInput
@@ -50,6 +54,11 @@ const Dashboard: React.FC = () => {
         numColumns={2}
         renderItem={({ item: pokemon, index }) => (
           <Card
+            poke_onPress={() =>
+              navigation.navigate('Pokemon', {
+                name: pokemon.name,
+              })
+            }
             poke_number={index + 1}
             poke_img={pokemon.image}
             poke_name={pokemon.name}
@@ -59,7 +68,7 @@ const Dashboard: React.FC = () => {
           />
         )}
       />
-    </>
+    </SafeAreaView>
   );
 };
 
