@@ -16,7 +16,7 @@ interface CardProps {
   poke_number: number;
   poke_img: string;
   poke_name: string;
-  poke_type: string;
+  poke_type: string[];
 }
 
 const Card: React.FC<CardProps> = ({
