@@ -9,6 +9,7 @@ const AppRoutes: React.FC = () => (
   <App.Navigator
     screenOptions={{
       headerTitle: 'POKÉMON CHALLENGE',
+      headerTitleStyle: { fontFamily: 'RobotoSlab-Bold' },
       headerTintColor: '#fff',
       headerStyle: { backgroundColor: '#28262E' },
       headerTitleAlign: 'center',
