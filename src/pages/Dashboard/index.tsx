@@ -19,6 +19,7 @@ export interface PokemonProps {
   image: string;
   height: number;
   weight: number;
+  id: number;
 }
 
 const Dashboard: React.FC = () => {
@@ -29,10 +30,10 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     (async function getPokemons(): Promise<void> {
       const pokemonsList = [];
-      const { data } = await api.get('pokemon?limit=3');
+      const { data } = await api.get('pokemon-species?limit=4');
 
       for await (const pokemon of data.results) {
-        const poke = await getPokemon(pokemon.url);
+        const poke = await getPokemon(pokemon.name);
         pokemonsList.push(poke);
       }
 
@@ -63,6 +64,7 @@ const Dashboard: React.FC = () => {
                 number: index + 1,
                 height: pokemon.height,
                 weight: pokemon.weight,
+                id: pokemon.id,
               })
             }
             poke_number={index + 1}
