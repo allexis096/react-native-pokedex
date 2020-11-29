@@ -7,6 +7,8 @@ export async function getPokemon(url: string): Promise<PokemonProps> {
     typesPoke: response.types,
     name: response.name,
     image: response.sprites.front_default,
+    height: response.height,
+    weight: response.weight,
   };
 
   return pokemon;
