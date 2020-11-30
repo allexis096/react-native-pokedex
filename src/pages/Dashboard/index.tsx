@@ -25,12 +25,14 @@ export interface PokemonProps {
 const Dashboard: React.FC = () => {
   const [pokemons, setPokemons] = useState<PokemonProps[]>([]);
 
+  const [filteredPokemon, setFilteredPokemon] = useState<string>('');
+
   const navigation = useNavigation();
 
   useEffect(() => {
     (async function getPokemons(): Promise<void> {
       const pokemonsList = [];
-      const { data } = await api.get('pokemon-species?limit=4');
+      const { data } = await api.get('pokemon-species?limit=50');
 
       for await (const pokemon of data.results) {
         const poke = await getPokemon(pokemon.name);
@@ -41,6 +43,10 @@ const Dashboard: React.FC = () => {
     })();
   }, []);
 
+  const filteredPokemons = pokemons.filter(pokemon => {
+    return pokemon.name.includes(filteredPokemon);
+  });
+
   return (
     <SafeAreaView>
       <Header>
@@ -48,11 +54,12 @@ const Dashboard: React.FC = () => {
         <TextInput
           placeholderTextColor="#666360"
           placeholder="Type the Pokémon name"
+          onChangeText={e => setFilteredPokemon(e)}
         />
       </Header>
 
       <PokeList
-        data={pokemons}
+        data={filteredPokemons}
         keyExtractor={pokemon => pokemon.name}
         numColumns={2}
         renderItem={({ item: pokemon, index }) => (
