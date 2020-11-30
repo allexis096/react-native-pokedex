@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
@@ -24,12 +25,13 @@ export interface PokemonProps {
 
 const Dashboard: React.FC = () => {
   const [pokemons, setPokemons] = useState<PokemonProps[]>([]);
-
+  const [loading, setLoading] = useState(false);
   const [filteredPokemon, setFilteredPokemon] = useState<string>('');
 
   const navigation = useNavigation();
 
   useEffect(() => {
+    setLoading(true);
     (async function getPokemons(): Promise<void> {
       const pokemonsList = [];
       const { data } = await api.get('pokemon-species?limit=50');
@@ -40,6 +42,7 @@ const Dashboard: React.FC = () => {
       }
 
       setPokemons(pokemonsList);
+      setLoading(false);
     })();
   }, []);
 
@@ -58,31 +61,39 @@ const Dashboard: React.FC = () => {
         />
       </Header>
 
-      <PokeList
-        data={filteredPokemons}
-        keyExtractor={pokemon => pokemon.name}
-        numColumns={2}
-        renderItem={({ item: pokemon, index }) => (
-          <Card
-            poke_onPress={() =>
-              navigation.navigate('Pokemon', {
-                name: pokemon.name,
-                image: pokemon.image,
-                number: index + 1,
-                height: pokemon.height,
-                weight: pokemon.weight,
-                id: pokemon.id,
-              })
-            }
-            poke_number={index + 1}
-            poke_img={pokemon.image}
-            poke_name={pokemon.name}
-            poke_type={pokemon.typesPoke.map(type =>
-              type.type.name.concat(', '),
-            )}
-          />
-        )}
-      />
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          style={{ marginTop: 20 }}
+          color="#fff"
+        />
+      ) : (
+        <PokeList
+          data={filteredPokemons}
+          keyExtractor={pokemon => pokemon.name}
+          numColumns={2}
+          renderItem={({ item: pokemon, index }) => (
+            <Card
+              poke_onPress={() =>
+                navigation.navigate('Pokemon', {
+                  name: pokemon.name,
+                  image: pokemon.image,
+                  number: index + 1,
+                  height: pokemon.height,
+                  weight: pokemon.weight,
+                  id: pokemon.id,
+                })
+              }
+              poke_number={index + 1}
+              poke_img={pokemon.image}
+              poke_name={pokemon.name}
+              poke_type={pokemon.typesPoke.map(type =>
+                type.type.name.concat(', '),
+              )}
+            />
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 };
