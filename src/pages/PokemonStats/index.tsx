@@ -49,6 +49,9 @@ interface StatsNumbersProps {
 }
 
 interface FamilyProps {
+  species: {
+    name: string;
+  };
   evolves_to: Array<{
     species: {
       name: string;
@@ -116,41 +119,40 @@ const PokemonStats: React.FC<RouteParams> = ({ route }) => {
     setLoadingFamily(true);
     (async () => {
       const pokemonsList = [];
+
       const {
-        data: {
-          chain: { evolves_to },
-        },
+        data: { chain },
       } = await api.get(`evolution-chain/${id}`);
 
-      for await (const pokemon of evolves_to) {
-        if (pokemon.species.name) {
-          const family1 = await getPokemon(pokemon.species.name);
-          pokemonsList.push(family1);
-        }
+      const family1 = chain.species.name;
 
-        const family2 = evolves_to.map(
-          (res: FamilyProps) => res.evolves_to[0].species.name,
-        )[0];
+      if (family1 !== name) {
+        const pokeFamily1 = await getPokemon(family1);
+        pokemonsList.push(pokeFamily1);
+      }
 
-        if (family2) {
-          const poke2 = await getPokemon(family2);
-          pokemonsList.push(poke2);
-        }
+      const family2 = chain.evolves_to.map(
+        (res: FamilyProps) => res.species.name,
+      );
 
-        const family3 = evolves_to
-          .map((res: FamilyProps) => res.evolves_to[0])
-          .map((res: FamilyProps) => res)[0].evolves_to;
+      if (family2[0] !== name) {
+        const pokeFamily2 = await getPokemon(family2[0]);
+        pokemonsList.push(pokeFamily2);
+      }
 
-        if (family3.length !== 0) {
-          const poke3 = await getPokemon(family3.species.name);
-          pokemonsList.push(poke3);
-        }
+      const family3 = chain.evolves_to.map((res: FamilyProps) => {
+        return res.evolves_to.map(res2 => res2.species.name)[0];
+      });
+
+      if (family3[0] !== name) {
+        const pokeFamily3 = await getPokemon(family3[0]);
+        pokemonsList.push(pokeFamily3);
       }
 
       setPokemons(pokemonsList);
       setLoadingFamily(false);
     })();
-  }, [id]);
+  }, [id, name]);
 
   return (
     <Container>
@@ -214,7 +216,7 @@ const PokemonStats: React.FC<RouteParams> = ({ route }) => {
                   id: pokemon.id,
                 })
               }
-              poke_number={index + 1}
+              poke_number={index + 2}
               poke_img={pokemon.image}
               poke_name={pokemon.name}
               poke_type={pokemon.typesPoke.map(type =>
