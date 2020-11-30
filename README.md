@@ -16,7 +16,7 @@
 <p align="center">
 
 <a href="https://reactjs.org/">
-  <img alt="ReactJS" src="https://img.shields.io/static/v1?color=blue&label=React Native&message=JS&?style=plastic&logo=React">
+  <img alt="ReactJS" src="https://img.shields.io/static/v1?color=blue&label=React%20Native&message=JS&?style=plastic&logo=React">
 </a>
 
 <a href="https://www.typescriptlang.org/">
